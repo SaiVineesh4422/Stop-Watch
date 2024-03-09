@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stop-watch</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 100px;
+      padding-left: 20%;
+      padding-right: 20%;
+      font-weight: bold;
+      background-color: blanchedalmond;
+    }
+    #display {
+      font-size: 50px;
+      height: 45%;
+      width: 100%;
+      margin: none;
+      margin-bottom: 30px;
+      margin-top: 250px;
+    }
+    button{
+        align-items: center;
+        justify-content: center;
+        height: 30%;
+        width: 10%;
+        background-color: rgba(26, 148, 204, 0.647);
+        padding:5px;
+        cursor: pointer;
+        margin-left: 20px;
+        border-color:1px black solid;
+        border-radius: 5px;
+        box-shadow: 0px 20px 20px gray;
+    }
+    button:hover{
+        background-color: rgba(127, 255, 212, 0.358);
+    }
+  </style>
+</head>
+<body>
+  <div id="display">00 <span></span> : 00 <span></span></div>
+  <button onclick="start()" id="st">Start</button>
+  <button onclick="stop()" id="stop">Stop</button>
+  <button onclick="resume()" id="res">Resume</button>
+  <button onclick="clearTimer()" id="clr">Reset</button>
+
+  <script>
+    var timer;
+    var hours = 0, minutes = 0, seconds = 0, milliseconds = 0;
+
+    function displayTime() {
+      document.getElementById('display').textContent = formatTime();
+    }
+
+    function formatTime() {
+        if(minutes!=0){
+            return pad(minutes) + " : " + pad(seconds) + " : " + pad(milliseconds);
+        }
+        else if(hours!=0){
+            return pad(hours) + " : " + pad(minutes) + " : " + pad(seconds) + " : " + pad(milliseconds);
+        }
+        else{
+            return + pad(seconds) + " : " + pad(milliseconds);
+        }
+    }
+
+    function pad(num) {
+      return (num < 10) ? "0" + num : num;
+    }
+
+    function start() {
+      if (!timer) {
+        timer = setInterval(update, 10); 
+      }
+    }
+
+    function update() {
+      milliseconds++;
+      if (milliseconds == 100) {
+        milliseconds = 0;
+        seconds++;
+        if (seconds == 60) {
+          seconds = 0;
+          minutes++;
+          if (minutes == 60) {
+            minutes = 0;
+            hours++;
+          }
+        }
+      }
+      displayTime();
+    }
+
+    function stop() {
+      clearInterval(timer);
+      timer = null;
+    }
+
+    function resume() {
+      if (!timer) {
+        timer = setInterval(update, 10);
+        document.getElementById("st").setAttribute("disable");
+      }
+    }
+
+    function clearTimer() {
+      stop();
+      hours = 0;
+      minutes = 0;
+      seconds = 0;
+      milliseconds = 0;
+      displayTime();
+    }
+  </script>
+</body>
+</html>
